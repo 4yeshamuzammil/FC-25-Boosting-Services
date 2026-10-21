@@ -1,0 +1,481 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --obsidian: #0B0D13;
+    --charcoal: #141824;
+    --charcoal-light: #1C2234;
+    --card-border: #262B3D;
+    --card-border-hover: #373F5A;
+    --neon: #00F59B;
+    --neon-glow: rgba(0, 245, 155, 0.25);
+    --crimson: #FF3B30;
+    --gold-rank: #FFB800;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background-color: #0B0D13;
+    color: #F3F4F6;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Prevent iOS zoom on focus by ensuring inputs have at least 16px font size on small screens */
+  @media screen and (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+  }
+
+  /* Custom sleek scrollbar for Dark Mode */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0B0D13;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #262B3D;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00F59B;
+  }
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+  background: rgba(20, 24, 36, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid #262B3D;
+}
+
+.glass-nav {
+  background: rgba(11, 13, 19, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid #262B3D;
+}
+
+/* iOS Safe Areas */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.neon-glow {
+  box-shadow: 0 0 25px -4px rgba(0, 245, 155, 0.35);
+}
+
+.neon-glow-sm {
+  box-shadow: 0 0 12px -2px rgba(0, 245, 155, 0.3);
+}
+
+.crimson-glow {
+  box-shadow: 0 0 20px -3px rgba(255, 59, 48, 0.35);
+}
+
+/* ========================================================================= */
+/* LIGHT THEME (RED & WHITE COMBINATION)                                     */
+/* Dark theme remains 100% unaltered. Light mode transforms into crisp       */
+/* White surfaces with EA Sports Red (#DC2626) accents and deep slate text. */
+/* ========================================================================= */
+
+html.light,
+[data-theme="light"] {
+  color-scheme: light;
+  --obsidian: #FFFFFF;
+  --charcoal: #FFFFFF;
+  --charcoal-light: #F8FAFC;
+  --card-border: #E2E8F0;
+  --card-border-hover: #CBD5E1;
+  --neon: #DC2626;
+  --neon-glow: rgba(220, 38, 38, 0.25);
+  --crimson: #B91C1C;
+  --gold-rank: #D97706;
+}
+
+/* Body & Root */
+html.light body,
+[data-theme="light"] body {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+/* Selection Highlight */
+html.light ::selection,
+[data-theme="light"] ::selection {
+  background-color: #DC2626 !important;
+  color: #FFFFFF !important;
+}
+
+/* Light Mode Scrollbar */
+html.light ::-webkit-scrollbar-track,
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #F1F5F9 !important;
+}
+html.light ::-webkit-scrollbar-thumb,
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #CBD5E1 !important;
+  border-radius: 4px;
+}
+html.light ::-webkit-scrollbar-thumb:hover,
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #DC2626 !important;
+}
+
+/* Backgrounds & Card Surfaces */
+html.light .bg-\[\#0B0D13\],
+[data-theme="light"] .bg-\[\#0B0D13\] {
+  background-color: #F8FAFC !important;
+}
+
+html.light .bg-\[\#080A0F\],
+[data-theme="light"] .bg-\[\#080A0F\] {
+  background-color: #FFFFFF !important;
+}
+
+html.light .bg-\[\#050608\],
+[data-theme="light"] .bg-\[\#050608\],
+html.light .bg-\[\#0c0d12\],
+[data-theme="light"] .bg-\[\#0c0d12\],
+html.light .bg-\[\#0D101A\],
+[data-theme="light"] .bg-\[\#0D101A\] {
+  background-color: #F1F5F9 !important;
+}
+
+html.light .bg-\[\#141824\],
+[data-theme="light"] .bg-\[\#141824\],
+html.light .bg-\[\#141824\]\/50,
+[data-theme="light"] .bg-\[\#141824\]\/50,
+html.light .bg-\[\#141824\]\/80,
+[data-theme="light"] .bg-\[\#141824\]\/80,
+html.light .bg-\[\#141824\]\/90,
+[data-theme="light"] .bg-\[\#141824\]\/90 {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 4px 20px -2px rgba(220, 38, 38, 0.04), 0 2px 8px -1px rgba(0, 0, 0, 0.04);
+}
+
+html.light .bg-\[\#1C2234\],
+[data-theme="light"] .bg-\[\#1C2234\],
+html.light .bg-\[\#1d2331\],
+[data-theme="light"] .bg-\[\#1d2331\] {
+  background-color: #F1F5F9 !important;
+}
+
+html.light .hover\:bg-\[\#1C2234\]:hover,
+[data-theme="light"] .hover\:bg-\[\#1C2234\]:hover,
+html.light .hover\:bg-\[\#262B3D\]:hover,
+[data-theme="light"] .hover\:bg-\[\#262B3D\]:hover {
+  background-color: #E2E8F0 !important;
+}
+
+/* Borders */
+html.light .border-\[\#262B3D\],
+[data-theme="light"] .border-\[\#262B3D\],
+html.light .border-\[\#262B3D\]\/50,
+[data-theme="light"] .border-\[\#262B3D\]\/50,
+html.light .border-\[\#262B3D\]\/60,
+[data-theme="light"] .border-\[\#262B3D\]\/60,
+html.light .border-\[\#262B3D\]\/80,
+[data-theme="light"] .border-\[\#262B3D\]\/80,
+html.light .border-\[\#262B3D\]\/90,
+[data-theme="light"] .border-\[\#262B3D\]\/90 {
+  border-color: #E2E8F0 !important;
+}
+
+html.light .border-white\/10,
+[data-theme="light"] .border-white\/10 {
+  border-color: #E2E8F0 !important;
+}
+
+/* Brand EA Red Accents (Replacing Dark Neon Green) */
+html.light .text-\[\#00F59B\],
+[data-theme="light"] .text-\[\#00F59B\] {
+  color: #DC2626 !important;
+}
+
+html.light .bg-\[\#00F59B\],
+[data-theme="light"] .bg-\[\#00F59B\] {
+  background-color: #DC2626 !important;
+  color: #FFFFFF !important;
+}
+
+html.light .bg-\[\#00F59B\]:hover,
+[data-theme="light"] .bg-\[\#00F59B\]:hover,
+html.light .hover\:bg-\[\#00D687\]:hover,
+[data-theme="light"] .hover\:bg-\[\#00D687\]:hover {
+  background-color: #B91C1C !important;
+}
+
+html.light .bg-\[\#00D687\],
+[data-theme="light"] .bg-\[\#00D687\] {
+  background-color: #B91C1C !important;
+  color: #FFFFFF !important;
+}
+
+html.light .bg-\[\#00F59B\]\/5,
+[data-theme="light"] .bg-\[\#00F59B\]\/5 {
+  background-color: rgba(220, 38, 38, 0.04) !important;
+}
+
+html.light .bg-\[\#00F59B\]\/10,
+[data-theme="light"] .bg-\[\#00F59B\]\/10 {
+  background-color: rgba(220, 38, 38, 0.08) !important;
+}
+
+html.light .bg-\[\#00F59B\]\/15,
+[data-theme="light"] .bg-\[\#00F59B\]\/15 {
+  background-color: rgba(220, 38, 38, 0.12) !important;
+}
+
+html.light .bg-\[\#00F59B\]\/20,
+[data-theme="light"] .bg-\[\#00F59B\]\/20 {
+  background-color: rgba(220, 38, 38, 0.16) !important;
+}
+
+html.light .bg-\[\#00F59B\]\/30,
+[data-theme="light"] .bg-\[\#00F59B\]\/30 {
+  background-color: rgba(220, 38, 38, 0.22) !important;
+}
+
+html.light .border-\[\#00F59B\],
+[data-theme="light"] .border-\[\#00F59B\] {
+  border-color: #DC2626 !important;
+}
+
+html.light .border-\[\#00F59B\]\/20,
+[data-theme="light"] .border-\[\#00F59B\]\/20 {
+  border-color: rgba(220, 38, 38, 0.2) !important;
+}
+
+html.light .border-\[\#00F59B\]\/30,
+[data-theme="light"] .border-\[\#00F59B\]\/30 {
+  border-color: rgba(220, 38, 38, 0.3) !important;
+}
+
+html.light .border-\[\#00F59B\]\/40,
+[data-theme="light"] .border-\[\#00F59B\]\/40 {
+  border-color: rgba(220, 38, 38, 0.4) !important;
+}
+
+html.light .border-\[\#00F59B\]\/50,
+[data-theme="light"] .border-\[\#00F59B\]\/50 {
+  border-color: rgba(220, 38, 38, 0.5) !important;
+}
+
+html.light .hover\:border-\[\#00F59B\]\/40:hover,
+[data-theme="light"] .hover\:border-\[\#00F59B\]\/40:hover,
+html.light .hover\:border-\[\#00F59B\]\/50:hover,
+[data-theme="light"] .hover\:border-\[\#00F59B\]\/50:hover {
+  border-color: #DC2626 !important;
+}
+
+html.light .hover\:text-\[\#00F59B\]:hover,
+[data-theme="light"] .hover\:text-\[\#00F59B\]:hover {
+  color: #DC2626 !important;
+}
+
+html.light .fill-\[\#00F59B\],
+[data-theme="light"] .fill-\[\#00F59B\] {
+  fill: #DC2626 !important;
+  color: #DC2626 !important;
+}
+
+/* High-Contrast Crisp Typography */
+html.light .text-white,
+[data-theme="light"] .text-white {
+  color: #0F172A !important;
+}
+
+html.light .text-gray-100,
+[data-theme="light"] .text-gray-100 {
+  color: #0F172A !important;
+}
+
+html.light .text-gray-200,
+[data-theme="light"] .text-gray-200 {
+  color: #1E293B !important;
+}
+
+html.light .text-gray-300,
+[data-theme="light"] .text-gray-300 {
+  color: #334155 !important;
+}
+
+html.light .text-gray-400,
+[data-theme="light"] .text-gray-400 {
+  color: #64748B !important;
+}
+
+html.light .text-gray-500,
+[data-theme="light"] .text-gray-500 {
+  color: #94A3B8 !important;
+}
+
+/* Explicitly preserve crisp white text on colored/gradient buttons and badges */
+html.light .bg-\[\#00F59B\],
+[data-theme="light"] .bg-\[\#00F59B\],
+html.light .bg-\[\#00F59B\] *,
+[data-theme="light"] .bg-\[\#00F59B\] *,
+html.light .bg-\[\#00D687\],
+[data-theme="light"] .bg-\[\#00D687\],
+html.light .bg-\[\#00D687\] *,
+[data-theme="light"] .bg-\[\#00D687\] *,
+html.light .bg-\[\#DC2626\],
+[data-theme="light"] .bg-\[\#DC2626\],
+html.light .bg-\[\#DC2626\] *,
+[data-theme="light"] .bg-\[\#DC2626\] *,
+html.light .bg-red-600,
+[data-theme="light"] .bg-red-600,
+html.light .bg-red-600 *,
+[data-theme="light"] .bg-red-600 *,
+html.light .bg-\[\#FF3B30\],
+[data-theme="light"] .bg-\[\#FF3B30\],
+html.light .bg-\[\#FF3B30\] *,
+[data-theme="light"] .bg-\[\#FF3B30\] *,
+html.light .bg-gradient-to-r,
+[data-theme="light"] .bg-gradient-to-r,
+html.light .bg-gradient-to-r *,
+[data-theme="light"] .bg-gradient-to-r *,
+html.light .bg-gradient-to-br.from-\[\#00F59B\],
+[data-theme="light"] .bg-gradient-to-br.from-\[\#00F59B\],
+html.light .bg-gradient-to-br.from-\[\#00F59B\] *,
+[data-theme="light"] .bg-gradient-to-br.from-\[\#00F59B\] * {
+  color: #FFFFFF !important;
+}
+
+/* Interactive Rank / Platform Selectors */
+html.light button.border-\[\#00F59B\],
+[data-theme="light"] button.border-\[\#00F59B\] {
+  background-color: #FEF2F2 !important;
+  border-color: #DC2626 !important;
+}
+
+html.light button.border-\[\#00F59B\] span,
+[data-theme="light"] button.border-\[\#00F59B\] span {
+  color: #DC2626 !important;
+}
+
+html.light button.border-\[\#262B3D\],
+[data-theme="light"] button.border-\[\#262B3D\] {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #64748B !important;
+}
+
+html.light button.border-\[\#262B3D\]:hover,
+[data-theme="light"] button.border-\[\#262B3D\]:hover {
+  background-color: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+/* Glassmorphism & Overlays */
+html.light .glass-nav,
+[data-theme="light"] .glass-nav {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+html.light .glass-panel,
+[data-theme="light"] .glass-panel {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.05) !important;
+}
+
+html.light .neon-glow,
+[data-theme="light"] .neon-glow {
+  box-shadow: 0 0 25px -4px rgba(220, 38, 38, 0.35) !important;
+}
+
+html.light .neon-glow-sm,
+[data-theme="light"] .neon-glow-sm {
+  box-shadow: 0 0 12px -2px rgba(220, 38, 38, 0.3) !important;
+}
+
+/* Light Theme Gradients */
+html.light .text-transparent.bg-clip-text.bg-gradient-to-r.from-\[\#00F59B\].via-\[\#85FFBD\].to-white,
+[data-theme="light"] .text-transparent.bg-clip-text.bg-gradient-to-r.from-\[\#00F59B\].via-\[\#85FFBD\].to-white {
+  background-image: linear-gradient(to right, #DC2626, #EF4444, #991B1B) !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+html.light .bg-gradient-to-r.from-\[\#141824\].via-\[\#1C2234\].to-\[\#141824\],
+[data-theme="light"] .bg-gradient-to-r.from-\[\#141824\].via-\[\#1C2234\].to-\[\#141824\] {
+  background-image: linear-gradient(to right, #FFFFFF, #FFF1F2, #FFFFFF) !important;
+  border-color: #FECDD3 !important;
+}
+
+html.light .bg-gradient-to-br.from-\[\#141824\].to-\[\#1C2234\],
+[data-theme="light"] .bg-gradient-to-br.from-\[\#141824\].to-\[\#1C2234\] {
+  background-image: linear-gradient(to bottom right, #FFFFFF, #FFF1F2) !important;
+  border-color: #FECDD3 !important;
+}
+
+html.light .bg-gradient-to-br.from-\[\#00F59B\].to-\[\#00D687\],
+[data-theme="light"] .bg-gradient-to-br.from-\[\#00F59B\].to-\[\#00D687\] {
+  background-image: linear-gradient(to bottom right, #DC2626, #B91C1C) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 25px -4px rgba(220, 38, 38, 0.4) !important;
+}
+
+/* Form Controls (Inputs, Selects, Textareas) */
+html.light input,
+[data-theme="light"] input,
+html.light select,
+[data-theme="light"] select,
+html.light textarea,
+[data-theme="light"] textarea {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+
+html.light input::placeholder,
+[data-theme="light"] input::placeholder,
+html.light textarea::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+html.light input:focus,
+[data-theme="light"] input:focus,
+html.light select:focus,
+[data-theme="light"] select:focus,
+html.light textarea:focus,
+[data-theme="light"] textarea:focus {
+  border-color: #DC2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+}
+
+/* Modals Backdrops in Light Mode */
+html.light .bg-black\/80,
+[data-theme="light"] .bg-black\/80,
+html.light .bg-black\/85,
+[data-theme="light"] .bg-black\/85 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}

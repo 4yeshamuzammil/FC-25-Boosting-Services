@@ -1,0 +1,6 @@
+@FCBoosting.Api_HostAddress = http://localhost:5268
+
+GET {{FCBoosting.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
