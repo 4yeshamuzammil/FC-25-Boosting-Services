@@ -1,0 +1,75 @@
+@model RegisterCustomerViewModel
+@{
+    ViewData["Title"] = "Customer Registration";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow-lg border-secondary">
+            <div class="card-header text-center py-4 bg-dark">
+                <i class="bi bi-person-plus text-warning fs-1 mb-2"></i>
+                <h3 class="fw-bold text-white mb-0">Customer Sign Up</h3>
+                <p class="text-secondary small mb-0">Create your account to order boosting and track progress</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <form asp-controller="Account" asp-action="Register" method="post" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="FullName" class="form-label text-secondary small fw-semibold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-person"></i></span>
+                            <input asp-for="FullName" class="form-control bg-dark border-secondary text-white" placeholder="John Doe" required />
+                        </div>
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label text-secondary small fw-semibold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="Email" class="form-control bg-dark border-secondary text-white" placeholder="john@example.com" required />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label text-secondary small fw-semibold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-telephone"></i></span>
+                            <input asp-for="Phone" class="form-control bg-dark border-secondary text-white" placeholder="+1-555-1234567" required />
+                        </div>
+                        <span asp-validation-for="Phone" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-2 mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Password" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="Password" class="form-control bg-dark border-secondary text-white" placeholder="Min 6 characters" required />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="ConfirmPassword" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="ConfirmPassword" class="form-control bg-dark border-secondary text-white" placeholder="Re-type password" required />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 py-2 fw-bold shadow">
+                        <i class="bi bi-check-lg me-1"></i> Complete Sign Up
+                    </button>
+                </form>
+
+                <div class="mt-4 pt-3 border-top border-secondary text-center small text-secondary">
+                    Already have an account? <a asp-controller="Account" asp-action="Login" class="text-warning fw-semibold text-decoration-none">Log In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

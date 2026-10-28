@@ -1,0 +1,220 @@
+@model ReviewApplicationViewModel
+@{
+    ViewData["Title"] = $"Review Application #{Model.Application.Id}";
+
+    // Parse Document Paths JSON
+    List<string> docPaths = new();
+    if (!string.IsNullOrWhiteSpace(Model.Application.DocumentPaths))
+    {
+        try { docPaths = System.Text.Json.JsonSerializer.Deserialize<List<string>>(Model.Application.DocumentPaths) ?? new(); }
+        catch { }
+    }
+
+    // Parse Screenshots JSON
+    List<string> screenshots = new();
+    if (!string.IsNullOrWhiteSpace(Model.Application.ScreenshotPaths))
+    {
+        try { screenshots = System.Text.Json.JsonSerializer.Deserialize<List<string>>(Model.Application.ScreenshotPaths) ?? new(); }
+        catch { }
+    }
+
+    var today = DateTime.Today;
+    int age = today.Year - Model.Application.DateOfBirth.Year;
+    if (Model.Application.DateOfBirth > today.AddYears(-age)) age--;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-white fw-bold mb-0">
+            <i class="bi bi-shield-check text-warning me-2"></i>Review Application #@Model.Application.Id
+        </h2>
+        <p class="text-secondary small mb-0">Applicant: <strong>@Model.Applicant.FullName</strong> (@Model.Applicant.Email)</p>
+    </div>
+    <a asp-action="Applications" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Back to Applications
+    </a>
+</div>
+
+<div class="row g-4">
+    <!-- LEFT: APPLICANT & DOCUMENT DETAILS -->
+    <div class="col-lg-7">
+        <!-- 1. PERSONAL INFO -->
+        <div class="card border-secondary mb-4">
+            <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                <span class="text-white fw-bold"><i class="bi bi-person text-warning me-2"></i>Personal Details</span>
+                @if (Model.Application.ApplicationStatus == "Pending")
+                {
+                    <span class="badge bg-warning text-dark">Pending Review</span>
+                }
+                else if (Model.Application.ApplicationStatus == "Approved")
+                {
+                    <span class="badge bg-success">Approved</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Rejected</span>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label class="text-secondary small">Full Legal Name</label>
+                        <div class="fw-bold text-white">@Model.Applicant.FullName</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-secondary small">Email Address</label>
+                        <div class="fw-bold text-white">@Model.Applicant.Email</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-secondary small">Phone Number</label>
+                        <div class="fw-bold text-white">@Model.Applicant.Phone</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-secondary small">Date of Birth & Age</label>
+                        <div>
+                            <span class="fw-bold text-white">@Model.Application.DateOfBirth.ToString("yyyy-MM-dd")</span>
+                            @if (Model.Application.IsAdult)
+                            {
+                                <span class="badge bg-success ms-2">Adult (@age yrs)</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark ms-2">Minor (@age yrs)</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-secondary small">National ID / CNIC</label>
+                        <div class="fw-bold text-info">@(string.IsNullOrWhiteSpace(Model.Application.CnicNumber) ? "N/A (Minor)" : Model.Application.CnicNumber)</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-secondary small">Application Submitted At</label>
+                        <div class="text-white">@Model.Application.CreatedAt.ToString("MMM dd, yyyy HH:mm:ss") UTC</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. VERIFICATION DOCUMENTS (STORED OUTSIDE WEB ROOT, SERVED VIA ADMIN ACTION) -->
+        <div class="card border-secondary mb-4">
+            <div class="card-header bg-dark">
+                <span class="text-white fw-bold"><i class="bi bi-file-earmark-lock text-warning me-2"></i>Secure Verification Documents</span>
+            </div>
+            <div class="card-body">
+                <p class="text-secondary small mb-3">
+                    <i class="bi bi-shield-fill-check text-success me-1"></i> These documents are stored outside the public web root for security and served exclusively through authenticated admin endpoints.
+                </p>
+
+                @if (docPaths.Count == 0)
+                {
+                    <div class="text-muted small">No verification documents attached.</div>
+                }
+                else
+                {
+                    <div class="list-group list-group-flush bg-transparent">
+                        @foreach (var doc in docPaths)
+                        {
+                            string label = "Document";
+                            string filePath = doc;
+                            if (doc.Contains(":"))
+                            {
+                                var parts = doc.Split(':', 2);
+                                label = parts[0].Replace("_", " ");
+                                filePath = parts[1];
+                            }
+
+                            <div class="list-group-item bg-dark border-secondary d-flex justify-content-between align-items-center mb-2 rounded">
+                                <div>
+                                    <i class="bi bi-file-earmark-text text-warning fs-5 me-2"></i>
+                                    <strong class="text-white">@label</strong>
+                                    <div class="small text-muted font-monospace">@filePath</div>
+                                </div>
+                                <a asp-action="DownloadSecureDocument" asp-route-path="@filePath" target="_blank" class="btn btn-outline-info btn-sm">
+                                    <i class="bi bi-eye me-1"></i> View / Download
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- 3. GAMEPLAY PROOF SCREENSHOTS -->
+        <div class="card border-secondary mb-4">
+            <div class="card-header bg-dark">
+                <span class="text-white fw-bold"><i class="bi bi-images text-warning me-2"></i>EA Sports FC Rank Proofs & Gameplay Screenshots (@screenshots.Count)</span>
+            </div>
+            <div class="card-body">
+                @if (screenshots.Count == 0)
+                {
+                    <div class="text-muted small">No screenshots submitted.</div>
+                }
+                else
+                {
+                    <div class="row g-3">
+                        @foreach (var shot in screenshots)
+                        {
+                            <div class="col-md-6">
+                                <div class="card bg-black border-secondary p-2 text-center">
+                                    <a asp-action="DownloadSecureDocument" asp-route-path="@shot" target="_blank">
+                                        <img src="@Url.Action("DownloadSecureDocument", new { path = shot })" alt="Gameplay Proof" class="img-fluid rounded border border-secondary" style="max-height: 200px; object-fit: cover;" onerror="this.onerror=null; this.src='https://placehold.co/400x250/1e293b/ffffff?text=View+Document';" />
+                                    </a>
+                                    <div class="mt-2">
+                                        <a asp-action="DownloadSecureDocument" asp-route-path="@shot" target="_blank" class="btn btn-sm btn-outline-light w-100">
+                                            <i class="bi bi-arrows-fullscreen me-1"></i> Expand Full Size
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: DECISION & REMARKS FORM -->
+    <div class="col-lg-5">
+        <div class="card border-secondary sticky-top" style="top: 20px;">
+            <div class="card-header bg-dark">
+                <span class="text-white fw-bold"><i class="bi bi-clipboard-check text-warning me-2"></i>Application Decision</span>
+            </div>
+            <div class="card-body">
+                <form asp-action="ProcessApplicationDecision" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="applicationId" value="@Model.Application.Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-semibold">Decision</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="decision" id="decisionApprove" value="Approve" @(Model.Decision == "Approve" ? "checked" : "") />
+                                <label class="form-check-label text-success fw-bold" for="decisionApprove">
+                                    <i class="bi bi-check-circle me-1"></i> Approve Player
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="decision" id="decisionReject" value="Reject" @(Model.Decision == "Reject" ? "checked" : "") />
+                                <label class="form-check-label text-danger fw-bold" for="decisionReject">
+                                    <i class="bi bi-x-circle me-1"></i> Reject Application
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary small fw-semibold">Admin Remarks / Feedback</label>
+                        <textarea name="adminRemarks" rows="4" class="form-control bg-dark border-secondary text-white" placeholder="Enter reason for approval or rejection (visible to applicant if rejected)...">@Model.AdminRemarks</textarea>
+                        <div class="form-text text-muted small">
+                            Approving will update the User status to 'Approved', granting full access to claim orders. Rejecting will notify the player upon sign-in.
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 py-2 fw-bold shadow">
+                        <i class="bi bi-check2-circle me-2"></i> Submit & Save Decision
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

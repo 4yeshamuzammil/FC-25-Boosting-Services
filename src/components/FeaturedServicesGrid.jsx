@@ -1,5 +1,6 @@
 import { useApp } from '../context/AppContext';
 import { Trophy, Zap, Coins, Sparkles, ArrowRight, ShieldCheck, Star, Check } from 'lucide-react';
+import { getAssetUrl } from '../utils/assets';
 
 export default function FeaturedServicesGrid() {
   const { setCurrentPage, openContactModal } = useApp();
@@ -10,7 +11,7 @@ export default function FeaturedServicesGrid() {
       page: 'ut-champions',
       title: 'UT Champions Weekend League',
       tagline: 'Guaranteed Rank 1 to 7 with top-tier pack rewards',
-      image: '/images/hero-fc-card.jpg',
+      image: getAssetUrl('images/hero-fc-card.jpg'),
       badge: 'TOP PICK • RANK 1',
       badgeColor: 'bg-[#00F59B] text-[#0B0D13]',
       price: '$24.99',
@@ -29,7 +30,7 @@ export default function FeaturedServicesGrid() {
       page: 'division-rivals',
       title: 'Division Rivals Rank Promotion',
       tagline: 'Climb from Div 10 to Elite + Weekly 7 Wins',
-      image: '/images/rivals-action.jpg',
+      image: getAssetUrl('images/rivals-action.jpg'),
       badge: 'HOT • POPULAR',
       badgeColor: 'bg-[#FFB800] text-[#0B0D13]',
       price: '$19.99',
@@ -48,7 +49,7 @@ export default function FeaturedServicesGrid() {
       page: 'coins',
       title: 'Buy EAFC 25 Coins (Safe Transfer)',
       tagline: 'Comfort trade with 100% EA transfer tax covered',
-      image: '/images/coins-bundle.jpg',
+      image: getAssetUrl('images/coins-bundle.jpg'),
       badge: 'INSTANT • TAX COVERED',
       badgeColor: 'bg-[#00F59B] text-[#0B0D13]',
       price: '$11.80',
@@ -67,7 +68,7 @@ export default function FeaturedServicesGrid() {
       page: 'all-services',
       title: 'Champions Play-Offs & Milestones',
       tagline: 'Direct qualification passes, Swaps & Player Objectives',
-      image: '/images/player-celebration.jpg',
+      image: getAssetUrl('images/player-celebration.jpg'),
       badge: 'SEASON PASS',
       badgeColor: 'bg-[#FF3B30] text-white',
       price: '$17.50',
@@ -124,7 +125,7 @@ export default function FeaturedServicesGrid() {
               {/* Card Picture Banner */}
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#080A0F]">
                 <img
-                  src={srv.image}
+                  src={getAssetUrl(srv.image)}
                   alt={srv.title}
                   className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500"
                   loading="lazy"

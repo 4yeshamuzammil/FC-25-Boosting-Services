@@ -1,0 +1,243 @@
+@model JoinTeamViewModel
+@{
+    ViewData["Title"] = "Join Our Team and Earn";
+}
+
+<div class="row justify-content-center py-4">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-secondary">
+            <div class="card-header bg-dark p-4 text-center">
+                <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">FC 25 Pro Roster Recruitment</span>
+                <h2 class="fw-bold text-white mb-1"><i class="bi bi-trophy text-warning me-2"></i>Join Our EA Sports FC Pro Booster Team</h2>
+                <p class="text-secondary mb-0">Play Weekend League, Division Rivals, and Qualifiers orders for clients and earn 70% per completed boost.</p>
+            </div>
+
+            <div class="card-body p-4 p-md-5">
+                <div class="legal-notice-bar mb-4">
+                    <i class="bi bi-shield-lock-fill fs-5 me-2"></i>
+                    <strong>IMPORTANT REQUIREMENT:</strong> To safeguard client accounts, all applicants must pass identity and skill verification. Customer accounts are high-priority assets; any misconduct carries strict legal liability.
+                </div>
+
+                <form asp-controller="Account" asp-action="JoinTeam" method="post" enctype="multipart/form-data" novalidate id="joinTeamForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="AgreementVersion" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+                    <!-- 1. PERSONAL INFORMATION -->
+                    <h5 class="text-warning border-bottom border-secondary pb-2 mb-3">
+                        <i class="bi bi-person-badge me-2"></i>1. Personal Information
+                    </h5>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="FullName" class="form-control bg-dark border-secondary text-white" placeholder="Full Legal Name" required />
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="Email" class="form-control bg-dark border-secondary text-white" placeholder="booster@example.com" required />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Phone" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="Phone" class="form-control bg-dark border-secondary text-white" placeholder="+1-555-9876543" required />
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label asp-for="DateOfBirth" class="form-label text-secondary small fw-semibold"></label>
+                                <span id="ageBadge" class="badge bg-secondary mb-1">Calculating...</span>
+                            </div>
+                            <input asp-for="DateOfBirth" class="form-control bg-dark border-secondary text-white" type="date" id="dobInput" required />
+                            <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Password" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="Password" class="form-control bg-dark border-secondary text-white" placeholder="Account Password" required />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="ConfirmPassword" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="ConfirmPassword" class="form-control bg-dark border-secondary text-white" placeholder="Confirm Password" required />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- 2. IDENTITY VERIFICATION (DYNAMIC BASED ON AGE) -->
+                    <h5 class="text-warning border-bottom border-secondary pb-2 mb-3">
+                        <i class="bi bi-card-heading me-2"></i>2. Identity & Verification Documents
+                    </h5>
+
+                    <!-- Adult Section (Age >= 18) -->
+                    <div id="adultDocsSection" class="p-3 rounded border border-secondary bg-dark mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3 text-info fw-semibold">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>Adult Verification (Age 18+): Government CNIC / National ID Required</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CnicNumber" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="CnicNumber" class="form-control bg-dark border-secondary text-white" placeholder="e.g. 42101-1234567-1 or National ID" id="cnicNumberInput" />
+                            <span asp-validation-for="CnicNumber" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="CnicFrontFile" class="form-label text-secondary small fw-semibold"></label>
+                                <input asp-for="CnicFrontFile" type="file" class="form-control bg-dark border-secondary text-white" accept=".jpg,.jpeg,.png,.webp,.pdf" id="cnicFrontInput" />
+                                <span asp-validation-for="CnicFrontFile" class="text-danger small"></span>
+                                <div class="form-text text-muted small">JPG, PNG, PDF up to 5MB</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="CnicBackFile" class="form-label text-secondary small fw-semibold"></label>
+                                <input asp-for="CnicBackFile" type="file" class="form-control bg-dark border-secondary text-white" accept=".jpg,.jpeg,.png,.webp,.pdf" id="cnicBackInput" />
+                                <span asp-validation-for="CnicBackFile" class="text-danger small"></span>
+                                <div class="form-text text-muted small">JPG, PNG, PDF up to 5MB</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label asp-for="SupportingDocumentFile" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="SupportingDocumentFile" type="file" class="form-control bg-dark border-secondary text-white" accept=".jpg,.jpeg,.png,.webp,.pdf" />
+                            <span asp-validation-for="SupportingDocumentFile" class="text-danger small"></span>
+                            <div class="form-text text-muted small">Optional: Utility bill, passport copy, or student ID for faster verification.</div>
+                        </div>
+                    </div>
+
+                    <!-- Minor Section (Age < 18) -->
+                    <div id="minorDocsSection" class="p-3 rounded border border-warning bg-dark mb-4" style="display:none;">
+                        <div class="alert alert-warning d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-exclamation-triangle-fill fs-4 text-warning"></i>
+                            <div>
+                                <strong>Minor Applicant Policy (Under 18):</strong>
+                                You are legally considered a minor. You must provide a signed Guardian Consent Document along with a guardian ID copy to participate.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="GuardianConsentFile" class="form-label text-secondary small fw-semibold"></label>
+                            <input asp-for="GuardianConsentFile" type="file" class="form-control bg-dark border-secondary text-white" accept=".jpg,.jpeg,.png,.webp,.pdf" id="guardianFileInput" />
+                            <span asp-validation-for="GuardianConsentFile" class="text-danger small"></span>
+                            <div class="form-text text-muted small">Upload signed guardian consent letter or guardian ID (PDF or Image, max 5MB).</div>
+                        </div>
+                    </div>
+
+                    <!-- 3. GAMEPLAY PROOF & SCREENSHOTS -->
+                    <h5 class="text-warning border-bottom border-secondary pb-2 mb-3">
+                        <i class="bi bi-trophy me-2"></i>3. Skill & Gameplay Proof
+                    </h5>
+
+                    <div class="mb-4">
+                        <label asp-for="GameplayScreenshots" class="form-label text-secondary small fw-semibold"></label>
+                        <input asp-for="GameplayScreenshots" type="file" multiple class="form-control bg-dark border-secondary text-white" accept=".jpg,.jpeg,.png,.webp,.pdf" required />
+                        <span asp-validation-for="GameplayScreenshots" class="text-danger small"></span>
+                        <div class="form-text text-muted small">
+                            Provide multiple screenshots proving your high rank in EA Sports FC (e.g. Weekend League Rank 1-3 [16-20 Wins], Elite Division rating, or Division 1 checkpoint history).
+                        </div>
+                    </div>
+
+                    <!-- 4. PLAYER AGREEMENT ACCEPTANCE -->
+                    <h5 class="text-warning border-bottom border-secondary pb-2 mb-3">
+                        <i class="bi bi-shield-check me-2"></i>4. Agreement Acceptance
+                    </h5>
+
+                    <div class="p-3 rounded bg-dark border border-secondary mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" asp-for="AcceptAgreement" id="agreementCheck" required />
+                            <label class="form-check-label text-light" for="agreementCheck">
+                                <strong>I have read and legally agree to the <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#agreementModal" class="text-warning text-decoration-underline">Player Service Agreement</a>.</strong>
+                                I understand that any misuse of client credentials or cheat usage will result in immediate forfeiture of earnings and legal prosecution.
+                            </label>
+                        </div>
+                        <span asp-validation-for="AcceptAgreement" class="text-danger small d-block mt-2"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 py-3 fw-bold fs-5 shadow">
+                        <i class="bi bi-send-check me-2"></i> Submit Application for Admin Review
+                    </button>
+                </form>
+
+                <div class="mt-4 pt-3 border-top border-secondary text-center small text-secondary">
+                    Already an approved player? <a asp-controller="Account" asp-action="Login" class="text-warning fw-semibold text-decoration-none">Sign In Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Player Agreement Details -->
+<div class="modal fade" id="agreementModal" tabindex="-1" aria-labelledby="agreementModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content bg-dark border-secondary text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="agreementModalLabel"><i class="bi bi-file-text text-warning me-2"></i>GameBoost Hub Player Agreement (v1.0)</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. High Priority Client Accounts</h6>
+                <p class="text-secondary small">Booster will access customer accounts strictly for fulfilling order objectives. Any unauthorized changes (passwords, linked emails, in-game spending) are strictly prohibited.</p>
+                <h6>2. Anti-Cheat & Fair Play</h6>
+                <p class="text-secondary small">No automated bots, third-party overlays, memory injection, or aim assistance software may be utilized. Any account ban will be investigated and the booster held financially and legally liable.</p>
+                <h6>3. Payout and Earnings</h6>
+                <p class="text-secondary small">Earnings are awarded upon customer verification or completed order status. Payments are released upon admin payout execution.</p>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function calculateAge(dob) {
+            if (!dob) return 0;
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        function updateAgeSections() {
+            const dobVal = document.getElementById('dobInput').value;
+            const age = calculateAge(dobVal);
+            const ageBadge = document.getElementById('ageBadge');
+            const adultSection = document.getElementById('adultDocsSection');
+            const minorSection = document.getElementById('minorDocsSection');
+
+            if (!dobVal) {
+                ageBadge.textContent = 'Please enter DOB';
+                ageBadge.className = 'badge bg-secondary';
+                return;
+            }
+
+            if (age >= 18) {
+                ageBadge.textContent = `Age: ${age} (Adult)`;
+                ageBadge.className = 'badge bg-success';
+                adultSection.style.display = 'block';
+                minorSection.style.display = 'none';
+            } else {
+                ageBadge.textContent = `Age: ${age} (Minor)`;
+                ageBadge.className = 'badge bg-warning text-dark';
+                adultSection.style.display = 'none';
+                minorSection.style.display = 'block';
+            }
+        }
+
+        document.getElementById('dobInput').addEventListener('change', updateAgeSections);
+        document.addEventListener('DOMContentLoaded', updateAgeSections);
+    </script>
+}

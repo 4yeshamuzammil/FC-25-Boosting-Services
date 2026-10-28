@@ -1,0 +1,67 @@
+@model List<User>
+@{
+    ViewData["Title"] = "Customers Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-white fw-bold mb-0"><i class="bi bi-people text-warning me-2"></i>Customers Directory</h2>
+        <p class="text-secondary small mb-0">Overview of registered customers (Category = 'C') and their order statistics</p>
+    </div>
+</div>
+
+<div class="card border-secondary">
+    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+        <span class="text-white fw-bold"><i class="bi bi-person-lines-fill text-warning me-2"></i>Registered Customers (@Model.Count)</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead class="table-secondary text-secondary small text-uppercase">
+                    <tr>
+                        <th>User ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Joined</th>
+                        <th>Orders Placed</th>
+                        <th>Total Spend</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-5">
+                                <i class="bi bi-people fs-2 d-block mb-2"></i>
+                                No customers registered yet.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var c in Model)
+                        {
+                            decimal totalSpend = c.CustomerOrders.Sum(o => o.Amount);
+                            <tr>
+                                <td class="fw-bold text-white">#@c.Id</td>
+                                <td class="fw-semibold text-white">@c.FullName</td>
+                                <td>@c.Email</td>
+                                <td>@c.Phone</td>
+                                <td class="small text-secondary">@c.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <span class="badge bg-secondary">@c.CustomerOrders.Count orders</span>
+                                </td>
+                                <td class="text-success fw-bold">$@totalSpend.ToString("N2")</td>
+                                <td>
+                                    <span class="badge bg-success">@c.Status</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

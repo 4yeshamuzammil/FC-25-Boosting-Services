@@ -1,0 +1,116 @@
+@{
+    ViewData["Title"] = "EA Sports FC 25 Ultimate Team Boosting & Rank Services";
+}
+
+<div class="row align-items-center py-5 my-3 g-5">
+    <div class="col-lg-7">
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase mb-3">
+            <i class="bi bi-trophy-fill me-1"></i> Official FC 25 Esports Boosting
+        </span>
+        <h1 class="display-4 fw-bolder text-white mb-3 lh-sm">
+            EA Sports FC 25 Champions & Rivals Boosting.
+        </h1>
+        <p class="lead text-secondary mb-4">
+            Order verified boosting for <strong>EA Sports FC 25 Ultimate Team</strong>.
+            Weekend League (Rank 1-3), Division Rivals Elite promotion, Play-Offs qualification, and 7/7 weekly rewards played by verified FC Pro players on PS5, Xbox Series X/S, and PC.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-warning btn-lg px-4 shadow">
+                <i class="bi bi-cart-plus me-2"></i> Order FC 25 Boost
+            </a>
+            <a asp-controller="Account" asp-action="JoinTeam" class="btn btn-outline-info btn-lg px-4">
+                <i class="bi bi-trophy me-2"></i> Join as FC Pro Booster
+            </a>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-4">
+                <i class="bi bi-door-open me-2"></i> Member Login
+            </a>
+        </div>
+
+        <div class="row mt-5 pt-3 g-3 text-start">
+            <div class="col-md-4">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-shield-lock-fill fs-2 text-warning"></i>
+                    <div>
+                        <div class="fw-bold text-white">FC Account Protection</div>
+                        <div class="text-secondary small">0% ban risk & no FC coins or points touched</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-lightning-fill fs-2 text-primary"></i>
+                    <div>
+                        <div class="fw-bold text-white">Rank 1-3 Pros</div>
+                        <div class="text-secondary small">Vetted 19-1 Weekend League players</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-cash-stack fs-2 text-success"></i>
+                    <div>
+                        <div class="fw-bold text-white">Automated Payouts</div>
+                        <div class="text-secondary small">70% booster earnings share & tracking</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-header bg-dark d-flex justify-content-between align-items-center py-3">
+                <span class="fw-bold text-white"><i class="bi bi-fire text-danger me-2"></i>Popular FC 25 Services</span>
+                <span class="badge bg-success">Instant Weekend Start</span>
+            </div>
+            <div class="card-body p-4">
+                <div class="list-group list-group-flush bg-transparent">
+                    <div class="list-group-item bg-transparent text-white px-0 py-3 border-secondary">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 text-warning fw-bold">UT Champions: Weekend League Finals</h6>
+                                <p class="text-secondary small mb-0">Rank 1 (19-20 Wins), Rank 2 (18 Wins), Rank 3 (16 Wins)</p>
+                            </div>
+                            <span class="badge bg-secondary">From $69.99</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item bg-transparent text-white px-0 py-3 border-secondary">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 text-warning fw-bold">Division Rivals: Elite Division Push</h6>
+                                <p class="text-secondary small mb-0">Promotion to Elite, Division 1, 2, or 3 checkpoints</p>
+                            </div>
+                            <span class="badge bg-secondary">From $45.00</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item bg-transparent text-white px-0 py-3 border-secondary">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 text-warning fw-bold">Champions Play-Offs (Qualifiers)</h6>
+                                <p class="text-secondary small mb-0">Guaranteed 4-10 wins finals qualification ticket</p>
+                            </div>
+                            <span class="badge bg-secondary">From $24.99</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item bg-transparent text-white px-0 py-3 border-secondary">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 text-warning fw-bold">Weekly 7/7 Rivals Wins</h6>
+                                <p class="text-secondary small mb-0">Complete weekly upgraded rewards before Thursday</p>
+                            </div>
+                            <span class="badge bg-secondary">From $35.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-3 rounded bg-dark border border-secondary text-center">
+                    <div class="small text-secondary mb-2">Are you a verified Weekend League Rank 1/2 player?</div>
+                    <a asp-controller="Account" asp-action="JoinTeam" class="btn btn-sm btn-outline-warning w-100 fw-bold">
+                        Apply to Join FC Pro Booster Roster
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

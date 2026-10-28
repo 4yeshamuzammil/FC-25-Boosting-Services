@@ -1,0 +1,233 @@
+@model OrdersFilterViewModel
+@{
+    ViewData["Title"] = "Orders Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-white fw-bold mb-0"><i class="bi bi-box-seam text-warning me-2"></i>Orders Management Grid</h2>
+        <p class="text-secondary small mb-0">Search, filter, reassign, or cancel customer boosting orders</p>
+    </div>
+</div>
+
+<!-- FILTERS CARD -->
+<div class="card border-secondary mb-4">
+    <div class="card-body p-3">
+        <form method="get" asp-action="Orders" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-semibold">Status</label>
+                <select name="status" class="form-select bg-dark border-secondary text-white">
+                    <option value="">-- All Statuses --</option>
+                    <!option value="Open" @(Model.Status == "Open" ? "selected" : "")>Open</!option>
+                    <!option value="Assigned" @(Model.Status == "Assigned" ? "selected" : "")>Assigned</!option>
+                    <!option value="InProgress" @(Model.Status == "InProgress" ? "selected" : "")>InProgress</!option>
+                    <!option value="Completed" @(Model.Status == "Completed" ? "selected" : "")>Completed</!option>
+                    <!option value="Cancelled" @(Model.Status == "Cancelled" ? "selected" : "")>Cancelled</!option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label text-secondary small fw-semibold">From Date</label>
+                <input type="date" name="fromDate" value="@(Model.FromDate?.ToString("yyyy-MM-dd"))" class="form-control bg-dark border-secondary text-white" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label text-secondary small fw-semibold">To Date</label>
+                <input type="date" name="toDate" value="@(Model.ToDate?.ToString("yyyy-MM-dd"))" class="form-control bg-dark border-secondary text-white" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-semibold">Assigned Player</label>
+                <select name="playerId" class="form-select bg-dark border-secondary text-white">
+                    <option value="">-- All Boosters --</option>
+                    @foreach (var p in Model.ApprovedPlayers)
+                    {
+                        <!option value="@p.Id" @(Model.PlayerId == p.Id ? "selected" : "")>@p.FullName (@p.Email)</!option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-warning w-100 fw-semibold"><i class="bi bi-funnel me-1"></i> Filter</button>
+                <a asp-action="Orders" class="btn btn-outline-secondary"><i class="bi bi-x-circle"></i></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ORDERS GRID -->
+<div class="card border-secondary">
+    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+        <span class="text-white fw-bold"><i class="bi bi-table text-warning me-2"></i>Orders List (@Model.Orders.Count)</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead class="table-secondary text-secondary small text-uppercase">
+                    <tr>
+                        <th>Order #</th>
+                        <th>Created</th>
+                        <th>Customer</th>
+                        <th>Game & Service</th>
+                        <th>Target Rank</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Assigned Player</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Orders.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted py-5">
+                                <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                No orders matching the selected criteria.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var o in Model.Orders)
+                        {
+                            <tr>
+                                <td class="fw-bold text-white">#@o.Id</td>
+                                <td class="small text-secondary">@o.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <div class="fw-semibold text-white">@o.Customer?.FullName</div>
+                                    <div class="small text-muted">@o.Customer?.Email</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-warning">@o.GameName</div>
+                                    <div class="small text-secondary">@o.ServiceType</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">@o.TargetRank</span>
+                                </td>
+                                <td class="text-success fw-bold">$@o.Amount.ToString("N2")</td>
+                                <td>
+                                    <span class="badge badge-status-@o.Status px-2 py-1">@o.Status</span>
+                                </td>
+                                <td>
+                                    @if (o.AssignedPlayer != null)
+                                    {
+                                        <div class="fw-semibold text-info">@o.AssignedPlayer.FullName</div>
+                                        <div class="small text-muted">Claimed: @(o.AssignedAt?.ToString("MMM dd HH:mm") ?? "N/A")</div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small fst-italic">Unassigned (Open)</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <!-- View Details Modal Trigger -->
+                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#orderDetailsModal-@o.Id" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+
+                                        @if (o.Status != "Completed" && o.Status != "Cancelled")
+                                        {
+                                            <!-- Reassign Trigger -->
+                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#reassignModal-@o.Id" title="Reassign Booster">
+                                                <i class="bi bi-arrow-left-right"></i>
+                                            </button>
+
+                                            <!-- Cancel Trigger -->
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal-@o.Id" title="Cancel Order">
+                                                <i class="bi bi-x-octagon"></i>
+                                            </button>
+                                        }
+                                    </div>
+
+                                    <!-- MODAL: ORDER DETAILS -->
+                                    <div class="modal fade text-start" id="orderDetailsModal-@o.Id" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content bg-dark border-secondary text-white">
+                                                <div class="modal-header border-secondary">
+                                                    <h5 class="modal-title">Order #@o.Id Details</h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body small">
+                                                    <p><strong>Game:</strong> @o.GameName (@o.ServiceType)</p>
+                                                    <p><strong>Target Rank:</strong> @o.TargetRank</p>
+                                                    <p><strong>Amount:</strong> $@o.Amount.ToString("N2")</p>
+                                                    <p><strong>Customer:</strong> @o.Customer?.FullName (@o.Customer?.Email, @o.Customer?.Phone)</p>
+                                                    <p><strong>Booster:</strong> @(o.AssignedPlayer?.FullName ?? "None")</p>
+                                                    <p><strong>Instructions / Details:</strong></p>
+                                                    <div class="p-2 rounded bg-black text-secondary">
+                                                        @(string.IsNullOrWhiteSpace(o.Details) ? "No special instructions provided." : o.Details)
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer border-secondary">
+                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- MODAL: REASSIGN ORDER -->
+                                    <div class="modal fade text-start" id="reassignModal-@o.Id" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content bg-dark border-secondary text-white">
+                                                <form asp-action="ReassignOrder" method="post">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="orderId" value="@o.Id" />
+                                                    <div class="modal-header border-secondary">
+                                                        <h5 class="modal-title"><i class="bi bi-arrow-left-right text-warning me-2"></i>Reassign Order #@o.Id</h5>
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="text-secondary small mb-3">
+                                                            Currently Assigned to: <strong>@(o.AssignedPlayer?.FullName ?? "None (Open)")</strong>.
+                                                            Select an approved booster to reassign this order. The audit log will record this change.
+                                                        </p>
+                                                        <label class="form-label text-secondary small fw-semibold">Select Approved Booster</label>
+                                                        <select name="newPlayerId" class="form-select bg-dark border-secondary text-white" required>
+                                                            <option value="">-- Choose Booster --</option>
+                                                            @foreach (var player in Model.ApprovedPlayers)
+                                                            {
+                                                                <option value="@player.Id">@player.FullName (@player.Email)</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="modal-footer border-secondary">
+                                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-warning btn-sm fw-bold">Confirm Reassign</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- MODAL: CANCEL ORDER -->
+                                    <div class="modal fade text-start" id="cancelModal-@o.Id" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content bg-dark border-secondary text-white">
+                                                <form asp-action="CancelOrder" method="post">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="orderId" value="@o.Id" />
+                                                    <div class="modal-header border-secondary">
+                                                        <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Cancel Order #@o.Id</h5>
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="text-secondary small mb-3">
+                                                            Are you sure you want to cancel order #@o.Id ($@o.Amount.ToString("N2"))?
+                                                        </p>
+                                                        <label class="form-label text-secondary small fw-semibold">Cancellation Reason</label>
+                                                        <textarea name="cancelReason" rows="2" class="form-control bg-dark border-secondary text-white" placeholder="Customer request, rule violation, etc."></textarea>
+                                                    </div>
+                                                    <div class="modal-footer border-secondary">
+                                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-danger btn-sm fw-bold">Yes, Cancel Order</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

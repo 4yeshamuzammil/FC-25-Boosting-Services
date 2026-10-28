@@ -1,0 +1,79 @@
+@model List<AuditLog>
+@{
+    ViewData["Title"] = "Platform Audit Logs";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-white fw-bold mb-0"><i class="bi bi-journal-text text-warning me-2"></i>Security & Operations Audit Trail</h2>
+        <p class="text-secondary small mb-0">Immutable records of administrative actions (approvals, rejections, reassignments, payouts)</p>
+    </div>
+</div>
+
+<div class="card border-secondary">
+    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+        <span class="text-white fw-bold"><i class="bi bi-shield-shaded text-warning me-2"></i>Audit Events (@Model.Count)</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead class="table-secondary text-secondary small text-uppercase">
+                    <tr>
+                        <th>Log #</th>
+                        <th>Timestamp (UTC)</th>
+                        <th>Administrator</th>
+                        <th>Action</th>
+                        <th>Target Entity</th>
+                        <th>Target ID</th>
+                        <th>Details</th>
+                        <th>IP Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-5">
+                                <i class="bi bi-journal-x fs-2 d-block mb-2"></i>
+                                No audit logs recorded yet.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var log in Model)
+                        {
+                            string actionBadge = log.Action switch
+                            {
+                                "ApprovePlayerApplication" => "bg-success",
+                                "RejectPlayerApplication" => "bg-danger",
+                                "ReassignOrder" => "bg-warning text-dark",
+                                "CancelOrder" => "bg-danger",
+                                "MarkEarningsPaid" => "bg-primary",
+                                _ => "bg-secondary"
+                            };
+
+                            <tr>
+                                <td class="fw-bold">#@log.Id</td>
+                                <td class="small text-secondary">@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td>
+                                    <div class="fw-semibold text-white">@log.AdminUser?.FullName</div>
+                                    <div class="small text-muted">@log.AdminUser?.Email</div>
+                                </td>
+                                <td>
+                                    <span class="badge @actionBadge">@log.Action</span>
+                                </td>
+                                <td><span class="badge bg-dark border border-secondary text-light">@log.TargetEntity</span></td>
+                                <td class="font-monospace">#@log.TargetId</td>
+                                <td class="small text-secondary" style="max-width: 320px;">
+                                    @(log.Details ?? "-")
+                                </td>
+                                <td class="small font-monospace text-muted">@log.IpAddress</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { DIVISION_RIVALS_TIERS, PLATFORMS, ADDONS_DATA } from '../data/mockData';
 import { Zap, ShieldCheck, Check, ArrowRight, Trophy, Flame } from 'lucide-react';
+import { getAssetUrl } from '../utils/assets';
 
 export default function DivisionRivalsPage() {
   const { addToCart, setIsCartOpen, openContactModal } = useApp();
@@ -71,7 +72,7 @@ export default function DivisionRivalsPage() {
         <div className="bg-gradient-to-r from-[#141824] via-[#1C2234] to-[#141824] border border-[#262B3D] rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden">
           <div className="absolute right-0 top-0 bottom-0 w-full sm:w-1/2 pointer-events-none opacity-20 overflow-hidden">
             <img
-              src="/images/rivals-action.jpg"
+              src={getAssetUrl('images/rivals-action.jpg')}
               alt="Division Rivals Action"
               className="w-full h-full object-cover object-center"
             />

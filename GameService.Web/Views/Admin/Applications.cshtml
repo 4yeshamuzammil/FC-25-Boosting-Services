@@ -1,0 +1,104 @@
+@model List<PlayerApplication>
+@{
+    ViewData["Title"] = "Player Applications";
+    string? currentStatus = ViewData["CurrentStatus"] as string;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-white fw-bold mb-0"><i class="bi bi-person-badge text-warning me-2"></i>Player Applications</h2>
+        <p class="text-secondary small mb-0">Review identity documents, gameplay proof screenshots, and approve or reject boosters</p>
+    </div>
+    <div class="btn-group">
+        <a asp-action="Applications" class="btn btn-sm @(string.IsNullOrEmpty(currentStatus) ? "btn-warning" : "btn-outline-secondary")">All</a>
+        <a asp-action="Applications" asp-route-status="Pending" class="btn btn-sm @(currentStatus == "Pending" ? "btn-warning" : "btn-outline-secondary")">Pending Only</a>
+        <a asp-action="Applications" asp-route-status="Approved" class="btn btn-sm @(currentStatus == "Approved" ? "btn-warning" : "btn-outline-secondary")">Approved</a>
+        <a asp-action="Applications" asp-route-status="Rejected" class="btn btn-sm @(currentStatus == "Rejected" ? "btn-warning" : "btn-outline-secondary")">Rejected</a>
+    </div>
+</div>
+
+<div class="card border-secondary">
+    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+        <span class="text-white fw-bold"><i class="bi bi-file-earmark-person text-warning me-2"></i>Applications List (@Model.Count)</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead class="table-secondary text-secondary small text-uppercase">
+                    <tr>
+                        <th>App #</th>
+                        <th>Applicant</th>
+                        <th>Date of Birth</th>
+                        <th>Age Category</th>
+                        <th>National ID / CNIC</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-5">
+                                <i class="bi bi-file-earmark-x fs-2 d-block mb-2"></i>
+                                No player applications found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var a in Model)
+                        {
+                            var today = DateTime.Today;
+                            int age = today.Year - a.DateOfBirth.Year;
+                            if (a.DateOfBirth > today.AddYears(-age)) age--;
+
+                            <tr>
+                                <td class="fw-bold text-white">#@a.Id</td>
+                                <td>
+                                    <div class="fw-semibold text-white">@a.User?.FullName</div>
+                                    <div class="small text-muted">@a.User?.Email &bull; @a.User?.Phone</div>
+                                </td>
+                                <td>@a.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    @if (a.IsAdult)
+                                    {
+                                        <span class="badge bg-success">Adult (@age yrs)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Minor (@age yrs)</span>
+                                    }
+                                </td>
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(a.CnicNumber) ? "N/A" : a.CnicNumber)
+                                </td>
+                                <td>
+                                    @if (a.ApplicationStatus == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending Review</span>
+                                    }
+                                    else if (a.ApplicationStatus == "Approved")
+                                    {
+                                        <span class="badge bg-success">Approved</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Rejected</span>
+                                    }
+                                </td>
+                                <td class="small text-secondary">@a.CreatedAt.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td class="text-end">
+                                    <a asp-action="ReviewApplication" asp-route-id="@a.Id" class="btn btn-warning btn-sm fw-semibold">
+                                        <i class="bi bi-search me-1"></i> Review
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-6 text-center">
+        <div class="card shadow-lg border-danger p-5">
+            <i class="bi bi-shield-slash-fill text-danger display-1 mb-3"></i>
+            <h2 class="text-white fw-bold mb-2">403 - Access Restricted</h2>
+            <p class="text-secondary mb-4">
+                You do not have permission to view this page or perform this action. Role-based security policies prevent unauthorized access across portals.
+            </p>
+            <div>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-warning px-4">
+                    <i class="bi bi-house-door me-1"></i> Return to Safety
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

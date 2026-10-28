@@ -1,5 +1,6 @@
 import { Shield, Zap, Star, Trophy, ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { getAssetUrl } from '../utils/assets';
 
 export default function Hero() {
   const { setCurrentPage } = useApp();
@@ -10,7 +11,7 @@ export default function Hero() {
       {/* Background Epic Stadium Floodlight Imagery */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <img
-          src="/images/stadium-bg.jpg"
+          src={getAssetUrl('images/stadium-bg.jpg')}
           alt="EA Sports FC Stadium"
           className="w-full h-full object-cover object-center opacity-15 mix-blend-luminosity scale-105 transition-transform duration-1000"
         />
@@ -126,7 +127,7 @@ export default function Hero() {
               <div className="bg-[#0B0D13] rounded-2xl border border-[#262B3D] overflow-hidden group/card relative shadow-xl">
                 <div className="relative aspect-[16/10] w-full overflow-hidden">
                   <img
-                    src="/images/hero-fc-card.jpg"
+                    src={getAssetUrl('images/hero-fc-card.jpg')}
                     alt="EA Sports FC 25 FUT Champions Pro Player Card"
                     className="w-full h-full object-cover object-center group-hover/card:scale-105 transition-transform duration-700"
                     loading="eager"

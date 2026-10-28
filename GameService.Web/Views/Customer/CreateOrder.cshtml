@@ -1,0 +1,108 @@
+@model CreateOrderViewModel
+@{
+    ViewData["Title"] = "Place EA Sports FC 25 Boosting Order";
+}
+
+<div class="row justify-content-center py-4">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-secondary">
+            <div class="card-header bg-dark py-4 text-center">
+                <i class="bi bi-trophy text-warning fs-1 mb-2"></i>
+                <h3 class="fw-bold text-white mb-0">Place an EA Sports FC 25 Order</h3>
+                <p class="text-secondary small mb-0">FUT Champions Weekend League, Division Rivals, Qualifiers, and Squad Battles</p>
+            </div>
+
+            <div class="card-body p-4 p-md-5">
+                <div class="legal-notice-bar mb-4">
+                    <i class="bi bi-shield-check fs-5 me-2"></i>
+                    <strong>ACCOUNT SAFETY GUARANTEE:</strong> Verified FC Pro boosters will never spend your FC Coins or FC Points. All earned campaign packs and player picks remain unopened in your FUT store.
+                </div>
+
+                <form asp-action="CreateOrder" method="post" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="GameName" class="form-label text-secondary small fw-semibold"></label>
+                            <select asp-for="GameName" class="form-select bg-dark border-secondary text-white" id="gameSelect">
+                                <option value="EA Sports FC 25">EA Sports FC 25 (Ultimate Team)</option>
+                                <option value="EA Sports FC 25 (Clubs)">EA Sports FC 25 (Pro Clubs)</option>
+                                <option value="EA Sports FC 25 (Co-Op / Draft)">EA Sports FC 25 (Co-Op / Draft)</option>
+                            </select>
+                            <span asp-validation-for="GameName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="ServiceType" class="form-label text-secondary small fw-semibold"></label>
+                            <select asp-for="ServiceType" class="form-select bg-dark border-secondary text-white" id="serviceTypeSelect">
+                                <option value="UT Champions Finals (Weekend League)">UT Champions Finals (Weekend League)</option>
+                                <option value="UT Champions Play-Offs (Qualifiers)">UT Champions Play-Offs (Qualifiers)</option>
+                                <option value="Division Rivals (Rank & Promotion)">Division Rivals (Rank & Promotion)</option>
+                                <option value="Division Rivals (Weekly 7/7 Wins)">Division Rivals (Weekly 7/7 Wins)</option>
+                                <option value="FUT Draft (4 Consecutive Wins)">FUT Draft (4 Consecutive Wins)</option>
+                                <option value="Squad Battles (Elite 1 / Top 200)">Squad Battles (Elite 1 / Top 200)</option>
+                                <option value="Evolution Card & Milestone XP Boost">Evolution Card & Milestone XP Boost</option>
+                            </select>
+                            <span asp-validation-for="ServiceType" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="TargetRank" class="form-label text-secondary small fw-semibold"></label>
+                            <select asp-for="TargetRank" class="form-select bg-dark border-secondary text-white">
+                                <option value="Rank 1 (19-20 Wins - Elite Tier)">Rank 1 (19-20 Wins - Elite Tier)</option>
+                                <option value="Rank 2 (18 Wins - Pro Tier)">Rank 2 (18 Wins - Pro Tier)</option>
+                                <option value="Rank 3 (16-17 Wins - High Tier)">Rank 3 (16-17 Wins - High Tier)</option>
+                                <option value="Rank 4 (14-15 Wins - Standard)">Rank 4 (14-15 Wins - Standard)</option>
+                                <option value="Rank 5 (11-13 Wins - Safe Target)">Rank 5 (11-13 Wins - Safe Target)</option>
+                                <option value="Elite Division Promotion">Elite Division Promotion</option>
+                                <option value="Division 1 Promotion">Division 1 Promotion</option>
+                                <option value="Division 2 Promotion">Division 2 Promotion</option>
+                                <option value="Division 3 Promotion">Division 3 Promotion</option>
+                                <option value="Weekly 7/7 Wins Guaranteed">Weekly 7/7 Wins Guaranteed</option>
+                                <option value="Rank 1 Play-Offs (5-0 Qualifiers)">Rank 1 Play-Offs (5-0 Qualifiers)</option>
+                            </select>
+                            <span asp-validation-for="TargetRank" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Amount" class="form-label text-secondary small fw-semibold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary text-success fw-bold">$</span>
+                                <input asp-for="Amount" class="form-control bg-dark border-secondary text-white" type="number" step="0.50" min="5" max="100000" required />
+                            </div>
+                            <span asp-validation-for="Amount" class="text-danger small"></span>
+                            <div class="form-text text-muted small">Standard Weekend League Rank 1: $179.99 | Rank 3: $99.99 | Div Rivals: $45-$90</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Details" class="form-label text-secondary small fw-semibold"></label>
+                        <textarea asp-for="Details" rows="4" class="form-control bg-dark border-secondary text-white" placeholder="Platform: PlayStation 5 / Xbox Series X / PC (EA App).
+EA Login / Backup Codes instructions.
+Preferred custom tactics (e.g. 4-3-2-1, direct passing).
+Note: All packs remain unopened in the store for customer."></textarea>
+                        <span asp-validation-for="Details" class="text-danger small"></span>
+                        <div class="form-text text-muted small">
+                            <i class="bi bi-lock-fill text-warning me-1"></i> Account details are encrypted and strictly restricted to the assigned verified pro booster.
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <a asp-action="Dashboard" class="btn btn-outline-secondary w-50 py-2">Cancel</a>
+                        <button type="submit" class="btn btn-warning w-50 py-2 fw-bold shadow">
+                            <i class="bi bi-cart-check me-1"></i> Confirm & Submit FC 25 Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

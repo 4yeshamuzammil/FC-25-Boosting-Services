@@ -1,5 +1,6 @@
 // Mock data for EA Sports FC Boosting Service Platform
 // Ready to map with SQL Server & ASP.NET Core API Models
+import { getAssetUrl } from '../utils/assets';
 
 export const PLATFORMS = [
   { id: 'ps5', name: 'PlayStation 5 / 4', shortName: 'PS5/PS4', icon: 'Gamepad2' },
@@ -145,7 +146,7 @@ export const OTHER_SERVICES = [
     startingPrice: 19.99,
     icon: 'Coins',
     badge: 'BESTSELLER',
-    image: '/images/coins-bundle.jpg',
+    image: getAssetUrl('images/coins-bundle.jpg'),
     features: ['Comfort Trade 0% Ban', 'Tax Covered (100%)', 'Completed in 15 mins'],
   },
   {
@@ -156,7 +157,7 @@ export const OTHER_SERVICES = [
     startingPrice: 18.99,
     icon: 'Trophy',
     badge: 'GUARANTEED',
-    image: '/images/champions-action.jpg',
+    image: getAssetUrl('images/champions-action.jpg'),
     features: ['Instant Start', 'Guaranteed Pass', 'Retains Match Record'],
   },
   {
@@ -167,7 +168,7 @@ export const OTHER_SERVICES = [
     startingPrice: 14.99,
     icon: 'Award',
     badge: 'HIGH VALUE',
-    image: '/images/fifa-ball.jpg',
+    image: getAssetUrl('images/fifa-ball.jpg'),
     features: ['Draft Tokens Used', 'Top 50k+ Packs', 'Done in ~45 mins'],
   },
   {
@@ -178,7 +179,7 @@ export const OTHER_SERVICES = [
     startingPrice: 39.99,
     icon: 'GraduationCap',
     badge: 'ELITE PROS',
-    image: '/images/player-celebration.jpg',
+    image: getAssetUrl('images/player-celebration.jpg'),
     features: ['Screen share analysis', 'Meta skill moves & finishes', 'Personalized training plan'],
   },
   {
@@ -189,7 +190,7 @@ export const OTHER_SERVICES = [
     startingPrice: 169.99,
     icon: 'Zap',
     badge: 'SAVE 35%',
-    image: '/images/hero-fc-card.jpg',
+    image: getAssetUrl('images/hero-fc-card.jpg'),
     features: ['Save $80 vs Individual', 'VIP Priority Queue', 'Dedicated Master Pro'],
   },
   {
@@ -200,7 +201,7 @@ export const OTHER_SERVICES = [
     startingPrice: 29.99,
     icon: 'Target',
     badge: 'FAST XP',
-    image: '/images/rivals-action.jpg',
+    image: getAssetUrl('images/rivals-action.jpg'),
     features: ['Specific player cards', 'Full season level 40 XP', 'Zero wasted matches'],
   },
 ];

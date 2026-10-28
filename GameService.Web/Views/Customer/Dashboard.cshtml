@@ -1,0 +1,132 @@
+@model List<Order>
+@{
+    ViewData["Title"] = "Customer Dashboard";
+    int totalOrders = ViewBag.TotalOrders ?? 0;
+    int activeOrders = ViewBag.ActiveOrders ?? 0;
+    int completedOrders = ViewBag.CompletedOrders ?? 0;
+    decimal totalSpent = ViewBag.TotalSpent ?? 0m;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-white fw-bold mb-0"><i class="bi bi-controller text-warning me-2"></i>My Boosting Orders</h2>
+        <p class="text-secondary small mb-0">Track your active boosting orders, view assigned pro boosters, and place new requests</p>
+    </div>
+    <a asp-action="CreateOrder" class="btn btn-warning shadow-sm">
+        <i class="bi bi-plus-circle me-1"></i> Place New Order
+    </a>
+</div>
+
+<!-- STATS CARDS -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-secondary">
+            <div class="card-body">
+                <span class="text-secondary small text-uppercase fw-semibold">Total Orders</span>
+                <h3 class="text-white fw-bold mb-0 mt-1">@totalOrders</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-secondary">
+            <div class="card-body">
+                <span class="text-secondary small text-uppercase fw-semibold">In Progress / Active</span>
+                <h3 class="text-info fw-bold mb-0 mt-1">@activeOrders</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-secondary">
+            <div class="card-body">
+                <span class="text-secondary small text-uppercase fw-semibold">Completed Orders</span>
+                <h3 class="text-success fw-bold mb-0 mt-1">@completedOrders</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-secondary">
+            <div class="card-body">
+                <span class="text-secondary small text-uppercase fw-semibold">Total Spent</span>
+                <h3 class="text-warning fw-bold mb-0 mt-1">$@totalSpent.ToString("N2")</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ORDERS TABLE -->
+<div class="card border-secondary">
+    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+        <span class="text-white fw-bold"><i class="bi bi-list-stars text-warning me-2"></i>Your Order History</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead class="table-secondary text-secondary small text-uppercase">
+                    <tr>
+                        <th>Order #</th>
+                        <th>Game Title</th>
+                        <th>Service Type</th>
+                        <th>Target Rank</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Assigned Booster</th>
+                        <th>Date Placed</th>
+                        <th class="text-end">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted py-5">
+                                <i class="bi bi-box-seam fs-2 d-block mb-2"></i>
+                                You have not placed any boosting orders yet.
+                                <div class="mt-2">
+                                    <a asp-action="CreateOrder" class="btn btn-warning btn-sm">Place First Order</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var o in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold text-white">#@o.Id</td>
+                                <td>
+                                    <span class="fw-bold text-warning">@o.GameName</span>
+                                </td>
+                                <td>@o.ServiceType</td>
+                                <td>
+                                    <span class="badge bg-secondary">@o.TargetRank</span>
+                                </td>
+                                <td class="text-success fw-bold">$@o.Amount.ToString("N2")</td>
+                                <td>
+                                    <span class="badge badge-status-@o.Status px-2 py-1">@o.Status</span>
+                                </td>
+                                <td>
+                                    @if (o.AssignedPlayer != null)
+                                    {
+                                        <div class="fw-semibold text-info">
+                                            <i class="bi bi-shield-check me-1"></i>@o.AssignedPlayer.FullName
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small fst-italic">Awaiting booster claim</span>
+                                    }
+                                </td>
+                                <td class="small text-secondary">@o.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td class="text-end">
+                                    <a asp-action="OrderDetails" asp-route-id="@o.Id" class="btn btn-outline-info btn-sm">
+                                        <i class="bi bi-eye me-1"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
