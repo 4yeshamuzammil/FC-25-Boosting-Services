@@ -3,15 +3,19 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.VERCEL ? '/' : '/FC-25-Boosting-Services/',
+  base: process.env.GITHUB_PAGES ? '/FC-25-Boosting-Services/' : '/',
+  build: {
+    outDir: 'dist',
+  },
   plugins: [
     react(),
     {
       name: 'base-asset-fallback',
       configureServer(server) {
-        server.middlewares.use((req, _res, next) => {
-          if (req.url && (req.url.startsWith('/images/') || req.url === '/favicon.svg')) {
-            req.url = '/FC-25-Boosting-Services' + req.url;
+        server.middlewares.use((req, res, next) => {
+          if (req.url && req.url.startsWith('/FC-25-Boosting-Services/')) {
+            const newUrl = req.url.replace('/FC-25-Boosting-Services/', '/');
+            req.url = newUrl;
           }
           next();
         });
